@@ -14,6 +14,7 @@
       >
       </v-img>
       <v-text-field
+        id="user-name"
         v-model="user.name"
         :rules="userRules.name"
         :counter="10"
@@ -23,6 +24,7 @@
       </v-text-field>
   
       <v-text-field
+        id="user-password"
         v-model="user.password"
         :rules="userRules.password"
         :counter="10"
@@ -89,7 +91,8 @@ const login = async (event: SubmitEventPromise) => {
     await event;
     if (!isValid.value) return;
 
-    await auth.login(user.value);
+    const token = await auth.getRecaptchaToken('login');
+    await auth.login(user.value, token);
   } catch(error: any) {
     showError.value = true;
     errorMessage.value = error?.response?.data ?? 'Unexpected Error. Contact your admin!';

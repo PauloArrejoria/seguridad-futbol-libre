@@ -2,7 +2,13 @@ import { HttpHandler } from './http-handler'
 
 const verifyApiHealthCheck = () => HttpHandler.get(`/`);
 
-const userLogin = (data: UserLoginRequest) => HttpHandler.put(`/login`, data);
+const userLogin = (data: UserLoginRequest, reCaptchToken: string) => {
+    const headers = {
+        'Recaptcha-Token': reCaptchToken,
+    };
+
+    return HttpHandler.put(`/login`, data, { headers });
+}
 
 class UserLoginRequest {
     name: string|null
