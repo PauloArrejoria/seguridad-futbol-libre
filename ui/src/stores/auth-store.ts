@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { tokenRestore, tokenClear, tokenSave } from '@/services/token-storage';
+import { tokenClear, tokenSave } from '@/services/token-storage';
 import { Themes } from '@/plugin/vuetify/Themes';
-import { userLogin, UserLoginRequest } from '@/services/public-api';
+import { LogInRequest, logIn } from '@/services/auth-api/login';
+import { checkLogin } from '@/services/auth-api/check-login';
 import router from '@/router';
 import { useReCaptcha } from 'vue-recaptcha-v3';
   
@@ -17,16 +18,22 @@ export const useAuthStore = defineStore('useAuthStore', {
     toggleTheme() {
         this.theme = this.theme === Themes.Light ? Themes.Dark : Themes.Light;
     },
-    checkLogin() {
-        const token = tokenRestore();
-        this.isLogged = !!token;
-    },
-    async login(payload: UserLoginRequest, reCaptchToken: string) {
-        const { data } = await userLogin(payload, reCaptchToken);
-        tokenSave(data.token);
+    async checkLogin() {
+      try {
+        await checkLogin();
         this.isLogged = true;
-    
-        router.push('/');
+        return Promise.resolve();
+      } catch(err) {
+        this.logout();
+        return Promise.reject();
+      }
+    },
+    async login(payload: LogInRequest, reCaptchToken: string) {
+      const { data } = await logIn(payload, reCaptchToken);
+      tokenSave(data.token);
+      this.isLogged = true;
+      
+      router.push('/');
     },
     async getRecaptchaToken(action: string): Promise<string> {
       try {
@@ -43,10 +50,11 @@ export const useAuthStore = defineStore('useAuthStore', {
       }
     },
     logout() {
-        tokenClear();
-        this.isLogged = false;
-        this.theme = Themes.Light;
-        router.push('login');
+      tokenClear();
+      this.isLogged = false;
+      this.theme = Themes.Light;
+
+      router.push('/login');
     }
   },
 })
