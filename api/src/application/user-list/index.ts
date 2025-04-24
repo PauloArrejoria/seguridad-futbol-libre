@@ -1,12 +1,12 @@
-import { getAuth } from "firebase-admin/auth";
 import { UserListResponseDto } from "./user-list-response-dto";
+import { UserModel } from "@infrastructure/models/user";
 
 const getUserList = async (): Promise<Array<UserListResponseDto>> => {
-    const listedResult = await getAuth().listUsers();
-    const response = listedResult.users.map(user => new UserListResponseDto(
-        user.uid,
-        user.email,
-        ''
+    const users = await UserModel.findAll({ raw : true });
+    const response = users.map(user => new UserListResponseDto(
+        user.id,
+        user.name,
+        user.resumme    
     ));
 
     return response;
