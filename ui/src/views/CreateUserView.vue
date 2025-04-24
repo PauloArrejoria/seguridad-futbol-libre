@@ -35,6 +35,10 @@
           required
         >
         </v-text-field>
+
+        <TextEditor
+          v-model:model-value="user.resumme"
+        />
     
         <v-btn
           block
@@ -68,6 +72,7 @@
   
 <script lang="ts" setup>
 import { ref } from 'vue';
+import TextEditor from '@/components/TextEditor.vue';
 import { SubmitEventPromise } from 'vuetify/lib/framework.mjs';
 import { createUser, CreateUserRequest } from '@/services/user-api/create';
 import router from '@/router';
