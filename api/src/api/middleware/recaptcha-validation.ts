@@ -19,6 +19,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         }
 
         if (response.data.score < process.env.GOOGLE_RECAPTCHA_SCORE) {
+            console.log("response.data.score "+response.data.score )
+            console.log("process.env.GOOGLE_RECAPTCHA_SCORE"+process.env.GOOGLE_RECAPTCHA_SCORE)
             next(new UnauthorizedError("Score invalido de Recaptcha", new Error()));
         }
 
