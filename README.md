@@ -10,12 +10,12 @@
 * Leer los README de cada seccion.
 
 
-UI
+UI   
 VUE_APP_SEC_API=http://localhost:3000/
 VUE_APP_RECAPTCHA_SITE_KEY=6Lc-jBErAAAAAO6k1iRwT4wV7TWb6wxbgO6yqSb4
 
 
-API
+API   
 PORT=3000
 UI_URL=http://localhost:8080
 GOOGLE_APPLICATION_CREDENTIALS=C:\Users\paulo\OneDrive\Escritorio\Facultad\5to Año\1er cuat - Seguridad en Sistemas de Informacion\utn-sec-info-2025\api\src\api\auth\firebase-admin-credentials.json
